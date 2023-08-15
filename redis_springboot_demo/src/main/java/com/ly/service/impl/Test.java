@@ -15,7 +15,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class Test {
     public static void main(String[] args) {
-        byte[] body = "版本3".getBytes();
+        byte[] body = "版本2".getBytes();
 
         String str = new String(body,Charsets.UTF_8);
         log.info("str:{}",str);
