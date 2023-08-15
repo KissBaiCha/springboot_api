@@ -15,7 +15,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class Test {
     public static void main(String[] args) {
-        byte[] body = "eyJkY1N1cHBsaWVySWQiOiIxMDczNzQyMDUzIiwibGFuZGxvcmRJZCI6IjEyMzQ1NiIsIm1lc3NhZ2UiOnsiYXZhdGFyIjoiaHR0cHM6Ly9maWxlLjQwMDE3LmNuL2ltZzE0MDAxN2NucHJvZHVjdC9jbi9oL2Vsb25nX2g1L2hvdGVsdGFyby9zdGF0aWMvbWluc3UvaW1saXN0L2hlYWRfc2N1bHB0dXJlXzEucG5nIiwiY29udGVudCI6Inp45L2g5aW9IiwiZGNTdXBwbGllcklkIjoiMTA3Mzc0MjA1MyIsIm1lc3NhZ2VJZCI6MCwibXNnVHlwZSI6MSwibmlja05hbWUiOiLmiL/kuJwiLCJyZWFkU3RhdHVzIjowLCJycElkIjoiMTExMjIyIiwic0hvdGVsSWQiOiIxMTExIiwic1Jvb21JZCI6IjAwMDEiLCJzZW5kVGltZSI6MTY5MjAwNTIyMzQ4Niwic2VuZGVySWQiOiIxMjM0NTYiLCJzZW5kZXJJZGVudGl0eSI6Mn0sInJlY2VpdmVySWQiOiIyNDAwMDAwMDExOTAyOTkzMzMifQ==".getBytes();
+        byte[] body = "版本1".getBytes();
 
         String str = new String(body,Charsets.UTF_8);
         log.info("str:{}",str);
