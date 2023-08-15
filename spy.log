@@ -1,0 +1,1 @@
+1688634748188|29|statement|connection 0|url jdbc:p6spy:mysql://localhost:3306/fantuandish?characterEncoding=utf8&serverTimezone=Asia/Shanghai|select cron from cron where cron_id = ?|select cron from cron where cron_id = 1
