@@ -19,7 +19,7 @@ import java.util.concurrent.Executors;
 @Configuration
 @ConfigurationProperties(prefix = "user")
 public class UserBeanFactory {
-    private List<User> properties = new ArrayList<>();
+    private final List<User> properties = new ArrayList<>();
 
     public List<User> getProperties() {
         return properties;

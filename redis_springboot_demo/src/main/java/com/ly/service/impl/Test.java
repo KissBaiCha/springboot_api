@@ -3,6 +3,11 @@ package com.ly.service.impl;
 import kotlin.text.Charsets;
 import lombok.extern.slf4j.Slf4j;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
+
 /**
  * ClassName: Test
  * Package: com.chixing.service.impl
@@ -15,35 +20,19 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class Test {
     public static void main(String[] args) {
-        byte[] body = "版本2".getBytes();
 
-        String str = new String(body,Charsets.UTF_8);
-        log.info("str:{}",str);
+        String[] arr = "epc,epcindex,eh5,tapphotel,eclockhotel,th5,yunshanfu,yunshanfuindex,addition,i-addition,tappaddition,tpc,tpcindex,baiduxiaochengxu,kuaiyingyong,toutiao,toutiaoindex,baiduxiaochengxuindex,kuaiyingyongindex,tappclockhotel,th5clockhotel,baiduxiaochengxuclockhotel,toutiaoclockhotel,kuaishou,kuaishouindex,dianjinghotel,qipaihotel,leisurehotel,leisurehotelindex,tleisurehotel,tappleisurehotel,douyin_lite,i-epc,i-epcindex,i-tpc,i-tpcindex,i-eh5,i-th5,i-baiduxiaochengxu,i-toutiao,i-kuaishou,i-douyin_lite,i-tgopc,toutiaoxcx,douyinxcx,toutiaoclockhotelxcx,douyinclockhotel,i-douyin,toutiao_lite,i-toutiao_lite,eminsu,tminsu,tappminsu,alipayxcx,alipayclockhotelxcx,alipayminsuxcx,alipayxcxindex,epchome,i-epchome,subwayxcx,subwayclockhotelxcx,subwayminsuxcx,i-subwayxcx,wxplugin,wxclockhotelplugin,wxminsuplugin,wxxcx,wxclockhotelxcx,wxminsuxcx,i-tapphotel,kuaiyingyongminsu,kuaiyingyongclockhotel,i-kuaiyingyong,i-alipayxcx,ikuaiyingyongindex,kuaiyingyongclockhotelindex,kuaiyingyongminsuindex,i-yunshanfu,alipayaddition,huixing".split(",");
+        String[] index = "eclockhotel,kuaiyingyong,i-kuaiyingyong,kuaiyingyongminsu,kuaiyingyongclockhotel,subwayxcx,alipayxcxindex,alipayxcx,alipayclockhotelxcx,alipayminsuxcx,tapphotel,tappclockhotel,tappminsu,i-tapphotel,eminsu,tminsu,subwayminsuxcx,wxminsuplugin,wxminsuxcx".split(",");
+
+        log.info(String.join(",", extractElements(Arrays.asList(arr), Arrays.asList(index))));
     }
-    public static boolean isNumeric(String str) {
-        if (str == null || str.isEmpty()) {
-            return false;
+    public static List<String> extractElements(List<String> a, List<String> b) {
+        List<String> result = new ArrayList<>();
+        for (String element : a) {
+            if (!b.contains(element)) {
+                result.add(element);
+            }
         }
-        try {
-            Double.parseDouble(str);
-            return true;
-        } catch (NumberFormatException e) {
-            return false;
-        }
-    }
-    public static int distance(double fromLng, double fromLat, double toLng, double toLat) {
-        double a, b, R;
-        //地球半径
-        R = 6378137;
-        fromLat = fromLat * Math.PI / 180.0;
-        toLat = toLat * Math.PI / 180.0;
-        a = fromLat - toLat;
-        b = (fromLng - toLng) * Math.PI / 180.0;
-        double d;
-        double sa2, sb2;
-        sa2 = Math.sin(a / 2.0);
-        sb2 = Math.sin(b / 2.0);
-        d = 2 * R * Math.asin(Math.sqrt(sa2 * sa2 + Math.cos(fromLat) * Math.cos(toLat) * sb2 * sb2));
-        return (int) d;
+        return result;
     }
 }
