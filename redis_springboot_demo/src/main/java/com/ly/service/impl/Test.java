@@ -1,7 +1,9 @@
 package com.ly.service.impl;
 
+import com.ly.entity.InstalmentInfoDTO;
 import lombok.extern.slf4j.Slf4j;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -18,27 +20,56 @@ import java.util.Map;
 @Slf4j
 public class Test {
     public static void main(String[] args) {
+        String str = "044G44_Oe4U0uB_7gNq5GHsNGInWcXlvTPvNQdJ-kixGXEb";
+    }
+    public static InstalmentInfoDTO getInstallmentCost(BigDecimal totalPrincipal, int instalmentNum, double taxRate, boolean interestFree){
+        // 计算每期本金
+        BigDecimal principalPerInstalment = totalPrincipal.divide(BigDecimal.valueOf(instalmentNum), 2, BigDecimal.ROUND_DOWN);
 
-//        String[] arr = "epc,epcindex,eh5,tapphotel,eclockhotel,th5,yunshanfu,yunshanfuindex,addition,i-addition,tappaddition,tpc,tpcindex,baiduxiaochengxu,kuaiyingyong,toutiao,toutiaoindex,baiduxiaochengxuindex,kuaiyingyongindex,tappclockhotel,th5clockhotel,baiduxiaochengxuclockhotel,toutiaoclockhotel,kuaishou,kuaishouindex,dianjinghotel,qipaihotel,leisurehotel,leisurehotelindex,tleisurehotel,tappleisurehotel,douyin_lite,i-epc,i-epcindex,i-tpc,i-tpcindex,i-eh5,i-th5,i-baiduxiaochengxu,i-toutiao,i-kuaishou,i-douyin_lite,i-tgopc,toutiaoxcx,douyinxcx,toutiaoclockhotelxcx,douyinclockhotel,i-douyin,toutiao_lite,i-toutiao_lite,eminsu,tminsu,tappminsu,alipayxcx,alipayclockhotelxcx,alipayminsuxcx,alipayxcxindex,epchome,i-epchome,subwayxcx,subwayclockhotelxcx,subwayminsuxcx,i-subwayxcx,wxplugin,wxclockhotelplugin,wxminsuplugin,wxxcx,wxclockhotelxcx,wxminsuxcx,i-tapphotel,kuaiyingyongminsu,kuaiyingyongclockhotel,i-kuaiyingyong,i-alipayxcx,ikuaiyingyongindex,kuaiyingyongclockhotelindex,kuaiyingyongminsuindex,i-yunshanfu,alipayaddition,huixing".split(",");
-//        String[] index = "eclockhotel,kuaiyingyong,i-kuaiyingyong,kuaiyingyongminsu,kuaiyingyongclockhotel,subwayxcx,alipayxcxindex,alipayxcx,alipayclockhotelxcx,alipayminsuxcx,tapphotel,tappclockhotel,tappminsu,i-tapphotel,eminsu,tminsu,subwayminsuxcx,wxminsuplugin,wxminsuxcx".split(",");
-        String cnUserValue = "userid=1048732781&token=029200194120060239163017177246195236110107108221042028161090033060033085165180181239119055229176165137006189195199083084075190150121045087090063140125184244014050052084017242045104095157219174145100050172249109151127&loginType=passport&secsign=81DRqbkHAeTsSlvSt6ub4QNiEEqBAfQMmcaSed4vkUGkVRmhJu2PKPt-BD20YtG9l5&authcode=B71DDDAFC6A2D0BE3F90E69DF40A3957";
+        // 计算总手续费
+        BigDecimal totalCommission = totalPrincipal.multiply(BigDecimal.valueOf(taxRate));
 
-        log.info(getSubCookiePram(cnUserValue,"secsign="));
+        //对总手续费进行取整。取整规则为 ROUND_HALF_EVEN；
+        totalCommission = totalCommission.setScale(1,BigDecimal.ROUND_HALF_EVEN);
 
+        // 计算每期手续费
+        BigDecimal commissionPerInstalment = totalCommission.divide(BigDecimal.valueOf(instalmentNum), 2, BigDecimal.ROUND_DOWN);
+
+        // 计算每期总金额
+        BigDecimal totalAmountPerInstalment = principalPerInstalment.add(commissionPerInstalment);
+
+        //总分期费用 本金 + 手续费
+        BigDecimal allTotalAmount = interestFree ? totalPrincipal : totalPrincipal.add(totalCommission);
+
+        InstalmentInfoDTO instalmentInfoDTO = new InstalmentInfoDTO();
+        // 将计算结果设置回instalmentInfoDTO中
+        instalmentInfoDTO.setPrincipal(principalPerInstalment.doubleValue());
+        instalmentInfoDTO.setTotalCommission(totalCommission.doubleValue());
+        instalmentInfoDTO.setCommission(commissionPerInstalment.doubleValue());
+        instalmentInfoDTO.setTotalAmount(totalAmountPerInstalment.doubleValue());
+        instalmentInfoDTO.setAllTotalAmount(allTotalAmount.doubleValue());
+
+        return instalmentInfoDTO;
     }
 
-    public static String getSubCookiePram(String cookieValue,String cookiePram) {
-        int startIndex = cookieValue.indexOf(cookiePram) + cookiePram.length();
+    public static String getSubCookieParam(String cookieValue, String cookieParam) {
         String result = "";
+
+        int lastIndex = cookieValue.lastIndexOf(cookieParam);
+        int startIndex = (lastIndex >= 0) ? lastIndex + cookieParam.length() : -1;
+
         if (startIndex >= 0) {
-            if (cookieValue.indexOf("&", startIndex) >= 0) {
-                result = cookieValue.substring(startIndex, cookieValue.indexOf("&", startIndex));
+            int endIndex = cookieValue.indexOf("&", startIndex);
+            if (endIndex >= 0) {
+                result = cookieValue.substring(startIndex, endIndex);
             } else {
                 result = cookieValue.substring(startIndex);
             }
         }
+
         return result;
     }
+
     // 方法接收集合数据和筛选条件的 Map
     public static <T> List<T> filterCollection(List<T> collection, Map<String, Object> filterMap) {
         List<T> filteredList = new ArrayList<>();
